@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.example.runprof_task"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.runprof_task"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = 27
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
