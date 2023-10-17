@@ -3,6 +3,7 @@ package com.example.runprof_task.homeScreen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.runprof_task.common.api.ApiState
 import com.example.runprof_task.homeScreen.domain.GetPopularMoviesUseCase
 import com.example.runprof_task.homeScreen.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,8 @@ class HomeViewModel @Inject constructor(val  useCase : GetPopularMoviesUseCase )
 
 //    val useCase =  GetPopularMoviesUseCase()
 
-    private var _popularMovies = MutableStateFlow<List<Movie>>(emptyList())
-    var  popularMovies : StateFlow<List<Movie>> = _popularMovies
+    private var _popularMovies = MutableStateFlow<ApiState>(ApiState.Loading)
+    var  popularMovies : StateFlow<ApiState> = _popularMovies
 
     init {
         getMovies()
@@ -27,9 +28,14 @@ class HomeViewModel @Inject constructor(val  useCase : GetPopularMoviesUseCase )
 
      private fun getMovies() {
         viewModelScope.launch {
-         val list  = useCase.execute(5)
-          _popularMovies.value = list
-           Log.i("Mizooo","DAta" + list.size)
+          try {
+            _popularMovies.value = ApiState.Success ( useCase.execute(5))
+          }catch(e:Exception) {
+             _popularMovies.value = ApiState.Failure(e)
+          }
+
+
+
         }
     }
 
