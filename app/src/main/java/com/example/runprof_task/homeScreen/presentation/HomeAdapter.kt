@@ -7,8 +7,9 @@ import com.bumptech.glide.Glide
 import com.example.runprof_task.R
 import com.example.runprof_task.databinding.MovieItemBinding
 import com.example.runprof_task.homeScreen.model.Movie
+import javax.inject.Inject
 
-class HomeAdapter(var moviesList : List<Movie>)  : RecyclerView.Adapter <HomeAdapter.HomeViewHolder>(){
+class HomeAdapter @Inject constructor(var moviesList : List<Movie>)  : RecyclerView.Adapter <HomeAdapter.HomeViewHolder>(){
     val imgUrl = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val binding = MovieItemBinding.inflate( LayoutInflater.from(parent.context),parent,false)

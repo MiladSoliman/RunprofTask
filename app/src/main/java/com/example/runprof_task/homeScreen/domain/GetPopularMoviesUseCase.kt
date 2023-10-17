@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class GetPopularMoviesUseCase @Inject constructor( val remotDataSource : RemoteDataSourceImp){
  // val remotDataSource = RemotDataSource()
-   suspend fun execute() : List<Movie>{
+   suspend fun execute(page:Int) : List<Movie>{
       Log.i("Mizo","Done")
-      return  remotDataSource.getPopularMovies()
+      return  remotDataSource.getPopularMovies(page)
     }
 }

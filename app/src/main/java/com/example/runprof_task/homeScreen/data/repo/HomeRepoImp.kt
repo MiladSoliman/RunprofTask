@@ -7,7 +7,7 @@ import com.example.runprof_task.homeScreen.model.Movie
 import javax.inject.Inject
 
 class HomeRepoImp @Inject constructor(val remote:RemoteDataSourceImp) : HomeRepo {
-    override suspend fun getPopularMovies(): List<Movie> {
-        return remote.getPopularMovies()
+    override suspend fun getPopularMovies(page:Int): List<Movie> {
+        return remote.getPopularMovies(page)
     }
 }

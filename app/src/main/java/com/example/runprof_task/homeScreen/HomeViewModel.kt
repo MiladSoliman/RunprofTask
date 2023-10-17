@@ -21,20 +21,17 @@ class HomeViewModel @Inject constructor(val  useCase : GetPopularMoviesUseCase )
     var  popularMovies : StateFlow<List<Movie>> = _popularMovies
 
     init {
-        printLogs()
         getMovies()
-        Log.i("Mizooo","Printt")
+
     }
 
-     fun getMovies() {
+     private fun getMovies() {
         viewModelScope.launch {
-         val list  = useCase.execute()
+         val list  = useCase.execute(5)
           _popularMovies.value = list
            Log.i("Mizooo","DAta" + list.size)
         }
     }
 
-     fun printLogs(){
-        Log.i("Mizooo","Printt")
-    }
+
 }
