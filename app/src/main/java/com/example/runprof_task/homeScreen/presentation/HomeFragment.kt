@@ -1,16 +1,18 @@
 package com.example.runprof_task.homeScreen.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.runprof_task.R
-import com.example.runprof_task.common.api.ApiState
 import com.example.runprof_task.databinding.FragmentHomeBinding
 import com.example.runprof_task.homeScreen.HomeViewModel
 import com.example.runprof_task.homeScreen.model.Movie
@@ -36,7 +38,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater)
-        homeAdapter = HomeAdapter()
+        homeAdapter = HomeAdapter(emptyList())
        // homeViewModel  HomeViewModel()
         return homeBinding.root
     }
@@ -46,32 +48,78 @@ class HomeFragment : Fragment() {
 
         homeBinding.homeRV.adapter = homeAdapter
         homeBinding.homeRV.layoutManager = GridLayoutManager(requireContext(),2)
-          lifecycleScope.launchWhenCreated {
+         /* lifecycleScope.launchWhenCreated {
               homeViewModel.moviesList.collect{
                   homeAdapter.submitData(it)
               }
+          }*/
+
+        lifecycleScope.launch {
+          homeAdapter.loadStateFlow.collect{
+              val state = it.refresh
+              homeBinding.homeProgressBar.isVisible = state is LoadState.Loading
           }
+
+        }
+        startObservation()
+
+
+        homeBinding.homeSearch.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (s.toString().isBlank()) {
+                    startObservation()
+
+                } else {
+                    searchForMovie(s.toString())
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+    }
+
+    private fun searchForMovie(s: String) {
+        lifecycleScope.launch {
+            homeAdapter.submitData(PagingData.empty())
+            homeAdapter.notifyDataSetChanged()
+        }
     }
 
 
-  /*  fun observeOnData(){
-        lifecycleScope.launch {
-            homeViewModel.popularMovies.collect{
-                when(it) {
-                    is ApiState.Loading -> {
-                        homeBinding.homeProgressBar.visibility = View.VISIBLE
-                    }
-                    is ApiState.Success<*> -> {
-                        homeBinding.homeProgressBar.visibility = View.GONE
-                        myMovies = (it.date  as? List<Movie> ) ?: emptyList()
-                        homeAdapter.updateFavList(myMovies)
-                    }
-                    else -> {
-                        homeBinding.homeProgressBar.visibility = View.GONE
-                        Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
-                    }
-                }
+   /*   fun observeOnData(){
+          lifecycleScope.launch {
+              homeViewModel.popularMovies.collect{
+                  when(it) {
+                      is ApiState.Loading -> {
+                          homeBinding.homeProgressBar.visibility = View.VISIBLE
+                      }
+                      is ApiState.Success-> {
+                          homeBinding.homeProgressBar.visibility = View.GONE
+                            startObservation()
+                      }
+                      else -> {
+                          homeBinding.homeProgressBar.visibility = View.GONE
+                          Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
+                      }
+                  }
+              }
+          }
+      }*/
+
+
+  private fun startObservation(){
+        lifecycleScope.launchWhenCreated {
+            homeViewModel.moviesList.collect{
+                homeViewModel.isLoading.value = false
+                homeAdapter.submitData(it)
             }
         }
-    }*/
+    }
 }
