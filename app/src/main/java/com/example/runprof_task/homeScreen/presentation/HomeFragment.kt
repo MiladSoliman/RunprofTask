@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater)
-        homeAdapter = HomeAdapter(listOf())
+        homeAdapter = HomeAdapter()
        // homeViewModel  HomeViewModel()
         return homeBinding.root
     }
@@ -46,24 +46,32 @@ class HomeFragment : Fragment() {
 
         homeBinding.homeRV.adapter = homeAdapter
         homeBinding.homeRV.layoutManager = GridLayoutManager(requireContext(),2)
-        lifecycleScope.launch {
-            homeViewModel.popularMovies.collect{
-              when(it) {
-                  is ApiState.Loading -> {
-                    homeBinding.homeProgressBar.visibility = View.VISIBLE
-                  }
-                  is ApiState.Success<*> -> {
-                      homeBinding.homeProgressBar.visibility = View.GONE
-                     myMovies = (it.date  as? List<Movie> ) ?: emptyList()
-                      homeAdapter.updateFavList(myMovies)
-                  }
-                  else -> {
-                      homeBinding.homeProgressBar.visibility = View.GONE
-                      Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
-                  }
+          lifecycleScope.launchWhenCreated {
+              homeViewModel.moviesList.collect{
+                  homeAdapter.submitData(it)
               }
-            }
-        }
+          }
     }
 
+
+  /*  fun observeOnData(){
+        lifecycleScope.launch {
+            homeViewModel.popularMovies.collect{
+                when(it) {
+                    is ApiState.Loading -> {
+                        homeBinding.homeProgressBar.visibility = View.VISIBLE
+                    }
+                    is ApiState.Success<*> -> {
+                        homeBinding.homeProgressBar.visibility = View.GONE
+                        myMovies = (it.date  as? List<Movie> ) ?: emptyList()
+                        homeAdapter.updateFavList(myMovies)
+                    }
+                    else -> {
+                        homeBinding.homeProgressBar.visibility = View.GONE
+                        Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }*/
 }
