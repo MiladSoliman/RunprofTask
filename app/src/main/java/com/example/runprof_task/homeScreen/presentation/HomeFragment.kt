@@ -5,19 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.runprof_task.R
 import com.example.runprof_task.databinding.FragmentHomeBinding
 import com.example.runprof_task.homeScreen.HomeViewModel
 import com.example.runprof_task.homeScreen.model.Movie
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var homeBinding: FragmentHomeBinding
     private lateinit var homeAdapter: HomeAdapter
-    private lateinit var homeViewModel: HomeViewModel
+   val homeViewModel: HomeViewModel by viewModels()
   //  lateinit var myMovies: List<Movie>
 
 
@@ -33,7 +35,7 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater)
         homeAdapter = HomeAdapter(listOf())
-        homeViewModel = HomeViewModel()
+       // homeViewModel  HomeViewModel()
         return homeBinding.root
     }
 

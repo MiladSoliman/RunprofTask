@@ -5,14 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.runprof_task.homeScreen.domain.GetPopularMoviesUseCase
 import com.example.runprof_task.homeScreen.model.Movie
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel :ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(val  useCase : GetPopularMoviesUseCase ) :ViewModel() {
 
-    val useCase =  GetPopularMoviesUseCase()
+//    val useCase =  GetPopularMoviesUseCase()
 
     private var _popularMovies = MutableStateFlow<List<Movie>>(emptyList())
     var  popularMovies : StateFlow<List<Movie>> = _popularMovies

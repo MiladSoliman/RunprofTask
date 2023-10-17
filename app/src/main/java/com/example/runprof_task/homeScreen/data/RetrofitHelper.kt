@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
+/*
 object RetrofitHelper {
 
     const val BASE_URL = "https://api.themoviedb.org/3/movie/"
@@ -25,6 +26,7 @@ object MovieAPi {
     }
 }
 
+*/
 
 
 

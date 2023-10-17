@@ -1,6 +1,7 @@
-/*
-package com.example.runprof_task
 
+package com.example.runprof_task.common.di
+
+import com.example.runprof_task.homeScreen.data.MoviesApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,12 +18,13 @@ class AppModule {
 
        @Singleton
        @Provides
-       fun weatherRetrofitProvider() : Retrofit{
+       fun weatherRetrofitProvider() : MoviesApiService{
            return  Retrofit
                .Builder()
                .baseUrl(BASE_URL)
                .addConverterFactory(GsonConverterFactory.create())
                .build()
+               .create(MoviesApiService::class.java)
        }
    }
-}*/
+}
