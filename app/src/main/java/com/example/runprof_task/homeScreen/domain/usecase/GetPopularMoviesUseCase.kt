@@ -1,4 +1,4 @@
-package com.example.runprof_task.homeScreen.domain
+package com.example.runprof_task.homeScreen.domain.usecase
 
 import android.util.Log
 import com.example.runprof_task.homeScreen.data.remote.RemoteDataSourceImp

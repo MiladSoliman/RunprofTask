@@ -1,10 +1,8 @@
 package com.example.runprof_task.common.paging
 
-import android.net.http.HttpException
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.runprof_task.homeScreen.domain.GetPopularMoviesUseCase
-import com.example.runprof_task.homeScreen.model.ApiResponse
+import com.example.runprof_task.homeScreen.domain.usecase.GetPopularMoviesUseCase
 import com.example.runprof_task.homeScreen.model.Movie
 
 class MoviePagingSource

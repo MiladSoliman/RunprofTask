@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater)
-        homeAdapter = HomeAdapter(emptyList())
+        homeAdapter = HomeAdapter()
        // homeViewModel  HomeViewModel()
         return homeBinding.root
     }
@@ -53,14 +53,18 @@ class HomeFragment : Fragment() {
                   homeAdapter.submitData(it)
               }
           }*/
-
         lifecycleScope.launch {
-          homeAdapter.loadStateFlow.collect{
-              val state = it.refresh
-              homeBinding.homeProgressBar.isVisible = state is LoadState.Loading
-          }
+            homeViewModel.isLoading.observe(viewLifecycleOwner){
+                if (it){
+                    homeBinding.homeProgressBar.visibility = View.VISIBLE
 
+                }else{
+                    homeBinding.homeProgressBar.visibility = View.GONE
+
+                }
+            }
         }
+        observeOnLoading()
         startObservation()
 
 
@@ -72,7 +76,6 @@ class HomeFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (s.toString().isBlank()) {
                     startObservation()
-
                 } else {
                     searchForMovie(s.toString())
                 }
@@ -86,8 +89,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun searchForMovie(s: String) {
+     homeViewModel.searchForMovie(s)
         lifecycleScope.launch {
-            homeAdapter.submitData(PagingData.empty())
+            homeAdapter.submitData(PagingData.from(homeViewModel.myList))
             homeAdapter.notifyDataSetChanged()
         }
     }
@@ -115,11 +119,29 @@ class HomeFragment : Fragment() {
 
 
   private fun startObservation(){
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launch {
+            homeAdapter.submitData(PagingData.empty())
+            homeAdapter.notifyDataSetChanged()
             homeViewModel.moviesList.collect{
-                homeViewModel.isLoading.value = false
                 homeAdapter.submitData(it)
+                homeAdapter.notifyDataSetChanged()
             }
         }
-    }
+  }
+
+  fun observeOnLoading(){
+      lifecycleScope.launch {
+          homeAdapter.loadStateFlow.collect{
+              val state = it.refresh
+              homeBinding.homeProgressBar.isVisible = state is LoadState.Loading
+          }
+
+      }
+  }
+
+
+
+
+
+
 }

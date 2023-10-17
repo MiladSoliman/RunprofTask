@@ -9,9 +9,11 @@ import com.bumptech.glide.Glide
 import com.example.runprof_task.R
 import com.example.runprof_task.databinding.MovieItemBinding
 import com.example.runprof_task.homeScreen.model.Movie
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import javax.inject.Inject
 
-class HomeAdapter @Inject constructor(var moviesList: List<Movie>)  :  PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {
+class HomeAdapter @Inject constructor()  :  PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {
     val imgUrl = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val binding = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,24 +25,30 @@ class HomeAdapter @Inject constructor(var moviesList: List<Movie>)  :  PagingDat
              return moviesList.size
      }*/
 
-    fun updateFavList(favListUpdated : List<Movie>){
+ /*   fun updateFavList(favListUpdated : List<Movie>){
         getItem(favListUpdated.size)
         moviesList = favListUpdated
         notifyDataSetChanged()
-    }
+    }*/
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        if (moviesList.isNotEmpty() ) {
+    /*    if (moviesList.isNotEmpty() ) {
             val movieItem = moviesList[position]
             Glide.with(holder.binding.root).load(imgUrl + movieItem.poster_path)
                 .into(holder.binding.moviePoster)
             holder.binding.movieName.text = movieItem.title
             holder.binding.movieDate.text = movieItem.release_date
-            holder.binding.movieRate.text = movieItem.vote_average.toString()
+            val df = DecimalFormat("#.#")
+            df.roundingMode = RoundingMode.DOWN
+            val roundoff = df.format( movieItem.vote_average)
+
+            holder.binding.movieRate.text = roundoff.toString()
         } else {
+        }
+        */
             holder.bind(getItem(position)!!)
             holder.setIsRecyclable(false)
-        }
+
     }
 
 
@@ -53,7 +61,10 @@ class HomeAdapter @Inject constructor(var moviesList: List<Movie>)  :  PagingDat
                     .into(binding.moviePoster)
                 binding.movieName.text = movieItem.title
                 binding.movieDate.text = movieItem.release_date
-                binding.movieRate.text = movieItem.vote_average.toString()
+                val df = DecimalFormat("#.#")
+                df.roundingMode = RoundingMode.DOWN
+                val roundoff = df.format( movieItem.vote_average)
+                binding.movieRate.text = roundoff.toString()
             }
         }
     }
