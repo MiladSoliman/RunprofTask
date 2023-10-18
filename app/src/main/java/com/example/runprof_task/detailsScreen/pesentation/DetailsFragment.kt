@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.runprof_task.R
 import com.example.runprof_task.common.api.ApiState
 import com.example.runprof_task.databinding.FragmentDetailsBinding
 import com.example.runprof_task.databinding.FragmentHomeBinding
 import com.example.runprof_task.detailsScreen.DetailsViewModel
+import com.example.runprof_task.detailsScreen.model.MovieDetailsResponse
 import com.example.runprof_task.homeScreen.presentation.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -24,6 +26,7 @@ class DetailsFragment : Fragment() {
     lateinit var binding : FragmentDetailsBinding
     private val detailsViewModel : DetailsViewModel by viewModels()
      private var movieId = 0
+    val imgUrl = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +58,14 @@ class DetailsFragment : Fragment() {
            detailsViewModel.movieDetails.collect{
                when(it) {
                    is ApiState.Loading -> {
+                       hideComponents()
                        Toast.makeText(requireContext(),"Loading...",Toast.LENGTH_SHORT).show()
                    }
                    is ApiState.Success<*> -> {
-                       Toast.makeText(requireContext(),"Done...",Toast.LENGTH_SHORT).show()
+                      // Toast.makeText(requireContext(),"Done...",Toast.LENGTH_SHORT).show()
+                       val data = it.date as? MovieDetailsResponse
+                       showComponents()
+                       data?.let { it1 -> setData(it1) }
                    }
                    else -> {
                        Toast.makeText(requireContext(),"Error...",Toast.LENGTH_SHORT).show()
@@ -68,4 +75,34 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private fun setData(movie:MovieDetailsResponse){
+        Glide.with(binding.root).load(imgUrl + movie.poster_path).placeholder(R.drawable.movie_placholder)
+            .into(binding.postrImg)
+
+        binding.movieTitle.text = movie.original_title
+        binding.relaseDate.text = movie.release_date
+        binding.rate.text = movie.vote_average.toString()
+        binding.overview.text = movie.overview
+    }
+
+    private fun hideComponents(){
+        binding.postrImg.visibility = View.GONE
+        binding.movieTitle.visibility = View.GONE
+        binding.relaseDate.visibility = View.GONE
+        binding.rate.visibility = View.GONE
+        binding.overview.visibility = View.GONE
+        binding.textView4.visibility = View.GONE
+        binding.card.visibility = View.GONE
+    }
+
+
+    private fun showComponents(){
+        binding.postrImg.visibility = View.VISIBLE
+        binding.movieTitle.visibility = View.VISIBLE
+        binding.relaseDate.visibility =View.VISIBLE
+        binding.rate.visibility = View.VISIBLE
+        binding.overview.visibility = View.VISIBLE
+        binding.textView4.visibility = View.VISIBLE
+        binding.card.visibility = View.VISIBLE
+    }
 }
