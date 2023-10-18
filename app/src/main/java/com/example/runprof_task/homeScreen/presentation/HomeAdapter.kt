@@ -13,7 +13,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class HomeAdapter @Inject constructor()  :  PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {
+class HomeAdapter @Inject constructor(var onClick:OnClickToShowDetails)  :  PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {
     val imgUrl = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val binding = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -65,6 +65,10 @@ class HomeAdapter @Inject constructor()  :  PagingDataAdapter<Movie, HomeAdapter
                 df.roundingMode = RoundingMode.DOWN
                 val roundoff = df.format( movieItem.vote_average)
                 binding.movieRate.text = roundoff.toString()
+
+                binding.root.setOnClickListener{
+                   onClick.showDetails(movieItem.id)
+                }
             }
         }
     }
