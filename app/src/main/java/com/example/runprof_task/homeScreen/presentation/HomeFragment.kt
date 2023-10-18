@@ -57,10 +57,10 @@ class HomeFragment : Fragment() {
             homeViewModel.isLoading.observe(viewLifecycleOwner){
                 if (it){
                     homeBinding.homeProgressBar.visibility = View.VISIBLE
-
+                    homeBinding.homeRV.visibility = View.GONE
                 }else{
                     homeBinding.homeProgressBar.visibility = View.GONE
-
+                    homeBinding.homeRV.visibility = View.VISIBLE
                 }
             }
         }
@@ -76,6 +76,7 @@ class HomeFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (s.toString().isBlank()) {
                     startObservation()
+                    homeViewModel.myList.clear()
                 } else {
                     searchForMovie(s.toString())
                 }
@@ -129,7 +130,7 @@ class HomeFragment : Fragment() {
         }
   }
 
-  fun observeOnLoading(){
+  private fun observeOnLoading(){
       lifecycleScope.launch {
           homeAdapter.loadStateFlow.collect{
               val state = it.refresh

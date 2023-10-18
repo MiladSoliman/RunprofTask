@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     var mm : kotlinx.coroutines.flow.Flow <PagingData<Movie>> = flowOf()
 
 
-   var myList : List<Movie> = emptyList()
+   var myList : MutableList<Movie> = mutableListOf()
     init {
     //   getMovies()
     }
@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
            try {
                isLoading.value = true
                delay(1000)
-               myList =  getSearchedMovieUseCase.execute(name)
+               myList =  getSearchedMovieUseCase.execute(name).toMutableList()
                isLoading.value = false
            }catch (e:Exception){
                ApiState.Failure(e)
