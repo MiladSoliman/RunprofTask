@@ -7,14 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.runprof_task.R
+import com.example.runprof_task.common.util.Constant
+import com.example.runprof_task.common.util.getDecimalRate
 import com.example.runprof_task.databinding.MovieItemBinding
 import com.example.runprof_task.homeScreen.model.Movie
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class HomeAdapter @Inject constructor()  :  PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {
-    val imgUrl = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
+class HomeAdapter @Inject constructor(var onClick:OnClickToShowDetails)  :  PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val binding = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HomeViewHolder(binding)
@@ -57,14 +58,18 @@ class HomeAdapter @Inject constructor()  :  PagingDataAdapter<Movie, HomeAdapter
 
         fun bind(movieItem: Movie) {
             binding.apply {
-                Glide.with(binding.root).load(imgUrl + movieItem.poster_path).placeholder(R.drawable.movie_placholder)
+                Glide.with(binding.root).load(Constant.IMAGES_URL + movieItem.poster_path).placeholder(R.drawable.movie_placholder)
                     .into(binding.moviePoster)
                 binding.movieName.text = movieItem.title
                 binding.movieDate.text = movieItem.release_date
-                val df = DecimalFormat("#.#")
+                /*val df = DecimalFormat("#.#")
                 df.roundingMode = RoundingMode.DOWN
-                val roundoff = df.format( movieItem.vote_average)
-                binding.movieRate.text = roundoff.toString()
+                val roundoff = df.format( movieItem.vote_average)*/
+                binding.movieRate.text = getDecimalRate(movieItem.vote_average)
+
+                binding.root.setOnClickListener{
+                   onClick.showDetails(movieItem.id)
+                }
             }
         }
     }

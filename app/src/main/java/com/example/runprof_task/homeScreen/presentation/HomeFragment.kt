@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() , OnClickToShowDetails{
     private lateinit var homeBinding: FragmentHomeBinding
     private lateinit var homeAdapter: HomeAdapter
    val homeViewModel: HomeViewModel by viewModels()
@@ -38,7 +39,7 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater)
-        homeAdapter = HomeAdapter()
+        homeAdapter = HomeAdapter(this)
        // homeViewModel  HomeViewModel()
         return homeBinding.root
     }
@@ -140,9 +141,10 @@ class HomeFragment : Fragment() {
       }
   }
 
-
-
-
+    override fun showDetails(movieId: Int) {
+      val action = HomeFragmentDirections.goToDetailsScreen(movieId)
+       Navigation.findNavController(requireView()).navigate(action)
+    }
 
 
 }
