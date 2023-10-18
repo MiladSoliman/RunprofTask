@@ -3,7 +3,7 @@ package com.example.runprof_task.homeScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.runprof_task.homeScreen.domain.GetPopularMoviesUseCase
+import com.example.runprof_task.homeScreen.domain.usecase.GetPopularMoviesUseCase
 import javax.inject.Inject
 
 class HomeViewModelFactory @Inject constructor(private val useCase: GetPopularMoviesUseCase) : ViewModelProvider.Factory {

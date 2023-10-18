@@ -10,4 +10,8 @@ class HomeRepoImp @Inject constructor(val remote:RemoteDataSourceImp) : HomeRepo
     override suspend fun getPopularMovies(page:Int): List<Movie> {
         return remote.getPopularMovies(page)
     }
+
+    override suspend fun getSearchedMovie(name: String): List<Movie> {
+        return remote.getSearchedMovie(name)
+    }
 }

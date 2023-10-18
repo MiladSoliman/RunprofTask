@@ -1,37 +1,88 @@
 package com.example.runprof_task.homeScreen
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.runprof_task.homeScreen.domain.GetPopularMoviesUseCase
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.runprof_task.common.api.ApiState
+import com.example.runprof_task.common.paging.MoviePagingSource
+import com.example.runprof_task.homeScreen.domain.usecase.GetPopularMoviesUseCase
+import com.example.runprof_task.homeScreen.domain.usecase.GetSearchedMovieUseCase
 import com.example.runprof_task.homeScreen.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import java.util.concurrent.Flow
+
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(val  useCase : GetPopularMoviesUseCase ) :ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val  getPopularMoviesUseCase : GetPopularMoviesUseCase,
+    private val getSearchedMovieUseCase: GetSearchedMovieUseCase
+) :ViewModel() {
 
 //    val useCase =  GetPopularMoviesUseCase()
 
-    private var _popularMovies = MutableStateFlow<List<Movie>>(emptyList())
-    var  popularMovies : StateFlow<List<Movie>> = _popularMovies
+    val isLoading = MutableLiveData<Boolean>()
 
+    private var _popularMovies = MutableStateFlow<ApiState>(ApiState.Loading)
+    var  popularMovies : StateFlow<ApiState> = _popularMovies
+
+
+ val moviesList   =
+      Pager(PagingConfig(1)) {
+          MoviePagingSource(getPopularMoviesUseCase)
+      }.flow.cachedIn(viewModelScope)
+
+    var mm : kotlinx.coroutines.flow.Flow <PagingData<Movie>> = flowOf()
+
+
+   var myList : MutableList<Movie> = mutableListOf()
     init {
-        getMovies()
-
+    //   getMovies()
     }
 
-     private fun getMovies() {
+   /*  private fun getMovies() {
+   *//*     viewModelScope.launch {
+         try {
+            _popularMovies.value = ApiState.Success (
+                Pager(PagingConfig(1)) {
+                    MoviePagingSource(useCase)
+                }.flow.cachedIn(viewModelScope)
+            )
+          }catch(e:Exception) {
+             _popularMovies.value = ApiState.Failure(e)
+          }*//*
+        //    moviesList = Pager(PagingConfig(1))
+
+        }*/
+
+    fun searchForMovie(name:String) {
         viewModelScope.launch {
-         val list  = useCase.execute(5)
-          _popularMovies.value = list
-           Log.i("Mizooo","DAta" + list.size)
+           try {
+               isLoading.value = true
+               delay(1000)
+               myList =  getSearchedMovieUseCase.execute(name).toMutableList()
+               isLoading.value = false
+           }catch (e:Exception){
+               ApiState.Failure(e)
+           }
+
+           Log.i("Dodo","" + myList.size)
         }
+
     }
 
 
 }
+
+

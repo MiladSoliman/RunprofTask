@@ -1,7 +1,7 @@
 
 package com.example.runprof_task.common.di
 
-import com.example.runprof_task.homeScreen.data.service.MoviesApiService
+import com.example.runprof_task.common.network.MoviesApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
    companion object {
-       private const val BASE_URL = "https://api.themoviedb.org/3/movie/"
+       private const val BASE_URL = "https://api.themoviedb.org/3/"
 
        @Singleton
        @Provides
