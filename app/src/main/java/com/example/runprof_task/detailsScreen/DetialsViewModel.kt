@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(private val useCase: GetMoveDetailsUseCase) :ViewModel() {
 
-    private val _movieDetails : MutableStateFlow<ApiState> = MutableStateFlow<ApiState>(ApiState.Loading)
+    private val _movieDetails : MutableStateFlow<ApiState> = MutableStateFlow(ApiState.Loading)
     val movieDetails = _movieDetails
 
     fun getMovieDetails(id:Int) {
@@ -20,7 +20,6 @@ class DetailsViewModel @Inject constructor(private val useCase: GetMoveDetailsUs
           try {
               val movie = useCase.execute(id)
               _movieDetails.value = ApiState.Success(movie)
-              Log.i("Mahy",movie.overview)
           }catch (e:Exception){
               _movieDetails.value = ApiState.Failure(e)
           }

@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.runprof_task.R
 import com.example.runprof_task.common.api.ApiState
+import com.example.runprof_task.common.util.Constant
+import com.example.runprof_task.common.util.getDecimalRate
 import com.example.runprof_task.databinding.FragmentDetailsBinding
 import com.example.runprof_task.databinding.FragmentHomeBinding
 import com.example.runprof_task.detailsScreen.DetailsViewModel
@@ -26,7 +28,6 @@ class DetailsFragment : Fragment() {
     lateinit var binding : FragmentDetailsBinding
     private val detailsViewModel : DetailsViewModel by viewModels()
      private var movieId = 0
-    val imgUrl = "https://www.themoviedb.org/t/p/w600_and_h900_bestv2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +39,6 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         movieId = requireArguments().getInt("movieId")
-        Log.i("idd","" + movieId)
         // Inflate the layout for this fragment
         binding = FragmentDetailsBinding.inflate(inflater)
         return binding.root
@@ -59,15 +59,16 @@ class DetailsFragment : Fragment() {
                when(it) {
                    is ApiState.Loading -> {
                        hideComponents()
-                       Toast.makeText(requireContext(),"Loading...",Toast.LENGTH_SHORT).show()
+                     binding.detailsProgress.visibility = View.VISIBLE
                    }
                    is ApiState.Success<*> -> {
-                      // Toast.makeText(requireContext(),"Done...",Toast.LENGTH_SHORT).show()
+                       binding.detailsProgress.visibility = View.GONE
                        val data = it.date as? MovieDetailsResponse
                        showComponents()
                        data?.let { it1 -> setData(it1) }
                    }
                    else -> {
+                       binding.detailsProgress.visibility = View.VISIBLE
                        Toast.makeText(requireContext(),"Error...",Toast.LENGTH_SHORT).show()
                    }
                }
@@ -76,12 +77,12 @@ class DetailsFragment : Fragment() {
     }
 
     private fun setData(movie:MovieDetailsResponse){
-        Glide.with(binding.root).load(imgUrl + movie.poster_path).placeholder(R.drawable.movie_placholder)
+        Glide.with(binding.root).load(Constant.IMAGES_URL + movie.poster_path).placeholder(R.drawable.movie_placholder)
             .into(binding.postrImg)
 
         binding.movieTitle.text = movie.original_title
         binding.relaseDate.text = movie.release_date
-        binding.rate.text = movie.vote_average.toString()
+        binding.rate.text = getDecimalRate(movie.vote_average)
         binding.overview.text = movie.overview
     }
 
