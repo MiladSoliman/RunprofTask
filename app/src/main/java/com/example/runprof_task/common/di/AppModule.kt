@@ -14,18 +14,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-   companion object {
-
-
        @Singleton
        @Provides
        fun weatherRetrofitProvider() : MoviesApiService {
-           return  Retrofit
+           val retrofit = Retrofit
                .Builder()
                .baseUrl(Constant.BASE_URL)
                .addConverterFactory(GsonConverterFactory.create())
                .build()
-               .create(MoviesApiService::class.java)
+
+              return retrofit.create(MoviesApiService::class.java)
        }
-   }
+
 }

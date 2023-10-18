@@ -1,22 +1,26 @@
-/*
 package com.example.runprof_task.homeScreen.di
-
-import com.example.runprof_task.homeScreen.data.MoviesApiService
+import com.example.runprof_task.homeScreen.data.remote.RemoteDataSource
+import com.example.runprof_task.homeScreen.data.remote.RemoteDataSourceImp
+import com.example.runprof_task.homeScreen.data.repo.HomeRepoImp
+import com.example.runprof_task.homeScreen.domain.repo.HomeRepo
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import retrofit2.Retrofit
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
 @Module
 @InstallIn(ViewModelComponent::class)
-abstract class HomeModule {
+abstract class HomeMoviesModule {
+    @ViewModelScoped
+    @Binds
+    abstract fun bindHomeRemoteDataSource(remoteDataSourceImp: RemoteDataSourceImp) : RemoteDataSource
 
-    companion object {
-        @ViewModelScoped
-        @Provides
-        fun provideMaintenanceListService(retrofit: Retrofit): MoviesApiService =
-            retrofit.create(MoviesApiService::class.java)
-    }
-    }
-*/
+    @ViewModelScoped
+    @Binds
+    abstract fun bindHomeRepo(homeRepoImp: HomeRepoImp) : HomeRepo
+}
+
+
