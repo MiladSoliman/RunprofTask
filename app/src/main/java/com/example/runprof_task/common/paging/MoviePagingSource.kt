@@ -7,8 +7,7 @@ import com.example.runprof_task.homeScreen.model.Movie
 
 class MoviePagingSource
     (private val useCase: GetPopularMoviesUseCase) :
-    PagingSource<Int,Movie>()  {
-
+    PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
@@ -22,12 +21,12 @@ class MoviePagingSource
                 prevKey = if (currentPage == 1) null else -1,
                 nextKey = currentPage.plus(1)
             )
-        }catch (e:Exception){
-           LoadResult.Error(e)
+        } catch (e: Exception) {
+            LoadResult.Error(e)
         }
     }
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-      return null
+        return null
     }
 }

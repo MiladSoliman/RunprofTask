@@ -8,19 +8,17 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class HomeMoviesModule {
     @ViewModelScoped
     @Binds
-    abstract fun bindHomeRemoteDataSource(remoteDataSourceImp: RemoteDataSourceImp) : RemoteDataSource
+    abstract fun bindHomeRemoteDataSource(remoteDataSourceImp: RemoteDataSourceImp): RemoteDataSource
 
     @ViewModelScoped
     @Binds
-    abstract fun bindHomeRepo(homeRepoImp: HomeRepoImp) : HomeRepo
+    abstract fun bindHomeRepo(homeRepoImp: HomeRepoImp): HomeRepo
 }
 
 

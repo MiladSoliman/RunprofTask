@@ -11,15 +11,15 @@ import retrofit2.http.Query
 interface MoviesApiService {
     @Headers(Constant.AUTH)
     @GET("movie/popular")
-    suspend fun getPopularMovies(@Query ("page") page :Int =1) : ApiResponse
+    suspend fun getPopularMovies(@Query("page") page: Int = 1): ApiResponse
 
 
     @Headers(Constant.AUTH)
     @GET("search/movie")
-    suspend fun getSearchedMovies(@Query("query") name : String) : ApiResponse
+    suspend fun getSearchedMovies(@Query("query") name: String): ApiResponse
 
 
     @Headers(Constant.AUTH)
     @GET("movie/{movie_id}")
-    suspend fun getMovieDetails(@Path("movie_id") id : Int) : MovieDetailsResponse
+    suspend fun getMovieDetails(@Path("movie_id") id: Int): MovieDetailsResponse
 }
