@@ -9,7 +9,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
-
+/*
+** MovieDetailsModule to provides instance of interfaces
+*/
 
 @Module
 @InstallIn(ViewModelComponent::class)

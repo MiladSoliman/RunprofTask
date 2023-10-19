@@ -23,6 +23,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+/*
+*** Details Fragment that responsible for observing on movie details
+ */
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
@@ -52,7 +55,7 @@ class DetailsFragment : Fragment() {
         startObservation()
     }
 
-
+   //method to observe on screen state (loading, success, failure) and handel every case
     private fun startObservation() {
         lifecycleScope.launch {
             detailsViewModel.movieDetails.collect {
@@ -79,6 +82,7 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    //method do set the movie details to UI components
     private fun setData(movie: MovieDetailsResponse) {
         Glide.with(binding.root).load(Constant.IMAGES_URL + movie.poster_path)
             .placeholder(R.drawable.movie_placholder)
@@ -90,6 +94,7 @@ class DetailsFragment : Fragment() {
         binding.overview.text = movie.overview
     }
 
+  //  method to hide UI components while loading state
     private fun hideComponents() {
         binding.postrImg.visibility = View.GONE
         binding.movieTitle.visibility = View.GONE
@@ -100,7 +105,7 @@ class DetailsFragment : Fragment() {
         binding.card.visibility = View.GONE
     }
 
-
+   //method to show UI components when the data arrived
     private fun showComponents() {
         binding.postrImg.visibility = View.VISIBLE
         binding.movieTitle.visibility = View.VISIBLE
@@ -111,7 +116,7 @@ class DetailsFragment : Fragment() {
         binding.card.visibility = View.VISIBLE
     }
 
-
+    // Network Observation that observe on statues of internet and handel this state
     private fun checkNetwork() {
         networkObservation = NetworkConnectivityObserver(requireContext())
         lifecycleScope.launch {

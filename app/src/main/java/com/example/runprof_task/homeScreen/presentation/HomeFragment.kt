@@ -23,7 +23,11 @@ import com.example.runprof_task.homeScreen.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+/*
+*** Home Fragment that responsible for observing on popular movies list and searched movies list.
+**  Display the data on recyclerView with GridLayout showing two items in row
+*** implement OnClickToShowDetails interface to get selected movie id from the HomeAdapter
+ */
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnClickToShowDetails {
     private lateinit var homeBinding: FragmentHomeBinding
@@ -44,7 +48,6 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
         // Inflate the layout for this fragment
         homeBinding = FragmentHomeBinding.inflate(inflater)
         homeAdapter = HomeAdapter(this)
-        // homeViewModel  HomeViewModel()
         return homeBinding.root
     }
 
@@ -54,6 +57,7 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
         homeBinding.homeRV.adapter = homeAdapter
         homeBinding.homeRV.layoutManager = GridLayoutManager(requireContext(), 2)
         checkNetwork()
+        // observing on loading state while searching
         lifecycleScope.launch {
             homeViewModel.isLoading.observe(viewLifecycleOwner) {
                 if (it) {
@@ -88,6 +92,7 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
         })
     }
 
+    // searching for the movie , called when the user start to enter movie name
     private fun searchForMovie(s: String) {
         homeViewModel.searchForMovie(s)
         lifecycleScope.launch {
@@ -96,6 +101,7 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
         }
     }
 
+    // observing on popular movies list and pass the data to paging adapter
     private fun startObservation() {
         lifecycleScope.launch {
             homeAdapter.submitData(PagingData.empty())
@@ -107,6 +113,7 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
         }
     }
 
+   // observing on loading state according to paging adapter
     private fun observeOnLoading() {
         lifecycleScope.launch {
             homeAdapter.loadStateFlow.collect {
@@ -118,11 +125,13 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
         }
     }
 
+    // navigate to details screen with selected movie id
     override fun showDetails(movieId: Int) {
         val action = HomeFragmentDirections.goToDetailsScreen(movieId)
         Navigation.findNavController(requireView()).navigate(action)
     }
 
+    // Network Observation that observe on statues of internet and handel this state
     private fun checkNetwork() {
         networkObservation = NetworkConnectivityObserver(requireContext())
         lifecycleScope.launch {
