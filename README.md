@@ -19,6 +19,7 @@ Network Permission
 - Flow
 - StateFlow
 - Hilt
+- Navigation Components
 - Unit testing
 
 ## SDK Version
