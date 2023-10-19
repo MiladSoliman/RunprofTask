@@ -69,7 +69,6 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
                 }
             }
         }
-        observeOnLoading()
         startObservation()
         homeBinding.homeSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -119,7 +118,7 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
             homeAdapter.loadStateFlow.collect {
                 val state = it.refresh
                 homeBinding.homeProgressBar.isVisible = state is LoadState.Loading
-                homeBinding.homeSearch.isVisible = state !is LoadState.Loading
+              homeBinding.homeSearch.isVisible = state !is LoadState.Loading
             }
 
         }
@@ -139,6 +138,7 @@ class HomeFragment : Fragment(), OnClickToShowDetails {
                 when (it.name) {
                     "Available" -> {
                         homeBinding.noNetworkSplash.visibility = View.GONE
+                        observeOnLoading()
                         startObservation()
                     }
 

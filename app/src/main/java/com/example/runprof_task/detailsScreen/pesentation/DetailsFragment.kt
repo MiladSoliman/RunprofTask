@@ -66,6 +66,7 @@ class DetailsFragment : Fragment() {
                     }
 
                     is ApiState.Success<*> -> {
+                        binding.noInternet.visibility = View.GONE
                         binding.detailsProgress.visibility = View.GONE
                         val data = it.date as? MovieDetailsResponse
                         showComponents()
@@ -124,6 +125,7 @@ class DetailsFragment : Fragment() {
                 when (it.name) {
                     "Available" -> {
                         binding.noInternet.visibility = View.GONE
+                        detailsViewModel.getMovieDetails(movieId)
                     }
 
                     "Lost" -> {
