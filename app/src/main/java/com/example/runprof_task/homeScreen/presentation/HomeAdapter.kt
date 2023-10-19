@@ -12,6 +12,12 @@ import com.example.runprof_task.common.util.getDecimalRate
 import com.example.runprof_task.databinding.MovieItemBinding
 import com.example.runprof_task.homeScreen.model.Movie
 import javax.inject.Inject
+/*
+** HomeAdapter that responsible for showing the movie data (title,image,rate,date), extends PagingDataAdapter to provide
+* continuous source of data to the user
+*
+* @param onClick an interface reference that responsible for transfer selected movie id to the fragment
+*/
 
 class HomeAdapter @Inject constructor(var onClick: OnClickToShowDetails) :
     PagingDataAdapter<Movie, HomeAdapter.HomeViewHolder>(differCallback) {

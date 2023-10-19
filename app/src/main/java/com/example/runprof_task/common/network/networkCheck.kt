@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
+/*
+** NetworkConnectivityObserver class that responsible for getting the statues of connection ( Available, Lost, UnAvailable)
+* and set this statues to flow that fragment can observe on and handle each case
+*/
 class NetworkConnectivityObserver(private val context: Context) : NetworkObservation {
 
     private val connectivityManger =

@@ -10,6 +10,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/*
+*** AppModule a module that provides singleton instance of MoviesApiService interface along the application
+*/
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {

@@ -7,7 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
-
+/*
+** MoviesApiService with Get method to get the data from api
+*/
 interface MoviesApiService {
     @Headers(Constant.AUTH)
     @GET("movie/popular")

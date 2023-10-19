@@ -17,6 +17,14 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * HomeViewModel class for the Popular Movies List and Searched Movies List
+ *
+ * @param getPopularMoviesUseCase The use case to pass it to paging source that responsible for providing the list of popular movies
+ * when opening the app.
+ *
+ * @param getSearchedMovieUseCase the use case that responsible for providing the list of searched movies
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
